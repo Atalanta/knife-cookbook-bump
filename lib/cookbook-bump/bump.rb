@@ -6,21 +6,14 @@ module CookbookBump
   class Bump < Chef::Knife
 
     def patch(cookbook_path, cookbook)
-      puts "Cookbook path: #{cookbook_path}"
-      puts "Cookbook: #{cookbook}"
       current_version = get_version(cookbook_path, cookbook).split(".").map{|i| i.to_i}
-      puts "Current version: #{current_version}"
       bumped_version = current_version.clone
       bumped_version[2] = bumped_version[2] + 1
-      puts "Bumped version: #{bumped_version}"
       metadata_file = File.join(cookbook_path, cookbook, "metadata.rb")
-      puts "Metadata file: #{metadata_file}"
       update_metadata(current_version.join('.'), bumped_version.join('.'), metadata_file)
     end
 
     def update_metadata(old_version, new_version, metadata_file)
-      puts "Old version: #{old_version}"
-      puts "New version: #{new_version}"
       open_file = File.open(metadata_file, "r")
       body_of_file = open_file.read
       open_file.close
