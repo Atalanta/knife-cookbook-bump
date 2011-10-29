@@ -6,7 +6,7 @@ module CookbookBump
     before :all do
       @bumper = Bump.new
       @cookbook_path = File.dirname(__FILE__)
-      @index = { "major" => 0, "minor" => 1, "patch" => 0 }
+      @index = { "major" => 0, "minor" => 1, "patch" => 2 }
     end
 
     describe "patch" do

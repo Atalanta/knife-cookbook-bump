@@ -5,7 +5,7 @@ require 'chef/cookbook_uploader'
 module CookbookBump
   class Bump < Chef::Knife
     
-    TYPE_INDEX = { "major" => 0, "minor" => 1, "patch" => 0 }
+    TYPE_INDEX = { "major" => 0, "minor" => 1, "patch" => 2 }
 
     def patch(cookbook_path, cookbook, type)
       t = TYPE_INDEX[type]
