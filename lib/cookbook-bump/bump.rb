@@ -5,7 +5,7 @@ require 'grit'
 
 module CookbookBump
   class Bump < Chef::Knife
-    
+
     TYPE_INDEX = { "major" => 0, "minor" => 1, "patch" => 2 }
 
     banner "knife bump COOKBOOK [MAJOR|MINOR|PATCH]"
@@ -74,18 +74,16 @@ module CookbookBump
 
     def get_tags(cookbook_path, cookbook)
       git_repo = find_git_repo(cookbook_path, cookbook)
-      puts "Git repo: #{git_repo}"
       g = Grit::Repo.new(git_repo)
-      puts "GOT THIS FAR"
-      puts g.config["remote.origin.url"].split(File::SEPARATOR).last.scan(cookbook)
-      puts "GOT THIS FAR"
       if g.config["remote.origin.url"].split(File::SEPARATOR).last.scan(cookbook).size > 0
-        puts "GOT THIS FAR"
-        puts "I found a repo at #{git_repo} - do you want to tag it?"
+        ui.confirm("I found a repo at #{git_repo} - do you want to tag it?")
       else
-        puts "I didn't find a repo with a name like #{cookbook}.  I did find #{git_repo} - are you sure you want to tag it?"
+        ui.confirm("I didn't find a repo with a name like #{cookbook}.  I did find #{git_repo} - are you sure you want to tag it?")
       end
       g.tags.map { |t| t.name }
+    end
+
+    def tag
     end
 
     def find_git_repo(cookbook_path, cookbook)

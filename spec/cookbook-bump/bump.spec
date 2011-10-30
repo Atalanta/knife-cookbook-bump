@@ -5,6 +5,7 @@ module CookbookBump
   describe Bump do
     before :all do
       @bumper = Bump.new
+      @bumper.ui = Chef::Knife::UI.new(StringIO.new, StringIO.new, StringIO.new, {})
       @cookbook_path = File.dirname(__FILE__)
       @index = { "major" => 0, "minor" => 1, "patch" => 2 }
     end
@@ -47,9 +48,7 @@ module CookbookBump
 
     describe "tag" do
       it "should tag the git repository in which the cookbook resides with the bumped version number" do
-        puts "Cookbook path: #{@cookbook_path}"
         existing_tags = @bumper.get_tags(@cookbook_path, "example_cookbook")
-        puts "Tags: #{existing_tags}"
         @bumper.patch(@cookbook_path, "example_cookbook", "patch")
         latest_version =  @bumper.get_version(@cookbook_path, "example_cookbook")
         @bumper.tag
