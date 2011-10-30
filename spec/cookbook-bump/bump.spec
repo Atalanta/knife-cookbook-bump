@@ -3,6 +3,16 @@ require 'spec_helper'
 module CookbookBump
 
   describe Bump do
+    before(:all) do
+      bare_repo_dir = File.join(File.dirname(__FILE__), 'origin_example_cookbook.git')
+      clone_repo_dir = File.join(File.dirname(__FILE__), 'example_cookbook2')
+
+      FileUtils.mkdir_p(bare_repo_dir)
+      g = Grit::Repo.init_bare(bare_repo_dir)
+      git_cloner = Grit::Git.new(clone_repo_dir)
+      git_cloner.clone({:quiet => false, :verbose => true, :progress => true, :branch => 'master'}, bare_repo_dir, clone_repo_dir)
+    end
+
     before :all do
       @bumper = Bump.new
       @bumper.ui = Chef::Knife::UI.new(StringIO.new, StringIO.new, StringIO.new, {})
