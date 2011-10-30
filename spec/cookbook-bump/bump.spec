@@ -45,5 +45,19 @@ module CookbookBump
       end
     end
 
+    describe "tag" do
+      it "should tag the git repository in which the cookbook resides with the bumped version number" do
+        puts "Cookbook path: #{@cookbook_path}"
+        existing_tags = @bumper.get_tags(@cookbook_path, "example_cookbook")
+        puts "Tags: #{existing_tags}"
+        @bumper.patch(@cookbook_path, "example_cookbook", "patch")
+        latest_version =  @bumper.get_version(@cookbook_path, "example_cookbook")
+        @bumper.tag
+        latest_tags = @bumper.get_tags(@cookbook_path, "example_cookbook")
+        new_tag = latest_tags - existing_tags
+        new_tag.should eq(latest_version)
+      end
+    end
+
   end
 end

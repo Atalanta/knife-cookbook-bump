@@ -1,16 +1,12 @@
 require 'chef/knife'
 require 'chef/cookbook_loader'
 require 'chef/cookbook_uploader'
+require 'grit'
 
 module CookbookBump
   class Bump < Chef::Knife
     
-    # def initialize(output=Chef::Knife::UI.new(@out, @err, @in, @config))
-    #   super
-    #   @output = output
-    # end
     TYPE_INDEX = { "major" => 0, "minor" => 1, "patch" => 2 }
-
 
     banner "knife bump COOKBOOK [MAJOR|MINOR|PATCH]"
 
@@ -75,6 +71,34 @@ module CookbookBump
       loader = ::Chef::CookbookLoader.new(cookbook_path)
       return loader[cookbook].version
     end
-    
+
+    def get_tags(cookbook_path, cookbook)
+      git_repo = find_git_repo(cookbook_path, cookbook)
+      puts "Git repo: #{git_repo}"
+      g = Grit::Repo.new(git_repo)
+      puts "GOT THIS FAR"
+      puts g.config["remote.origin.url"].split(File::SEPARATOR).last.scan(cookbook)
+      puts "GOT THIS FAR"
+      if g.config["remote.origin.url"].split(File::SEPARATOR).last.scan(cookbook).size > 0
+        puts "GOT THIS FAR"
+        puts "I found a repo at #{git_repo} - do you want to tag it?"
+      else
+        puts "I didn't find a repo with a name like #{cookbook}.  I did find #{git_repo} - are you sure you want to tag it?"
+      end
+      g.tags.map { |t| t.name }
+    end
+
+    def find_git_repo(cookbook_path, cookbook)
+      loader = ::Chef::CookbookLoader.new(cookbook_path)
+      cookbook_dir = loader[cookbook].root_dir
+      full_path = cookbook_dir.split(File::SEPARATOR)
+      (full_path.length - 1).downto(0) do |search_path_index|
+        git_config = File.join(full_path[0..search_path_index] + [".git", "config"])
+        if File.exist?(git_config)
+          return File.join(full_path[0..search_path_index])
+        end
+      end
+      ui.fatal("Unable to find a git repo for this cookbook.")
+    end
   end
 end
