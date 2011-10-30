@@ -43,18 +43,18 @@ Bumping
 
 Cookbooks follow a simple three level versioning pattern.  Knife bump allows the patch, minor or major version to be bumped, and will automatically update the version in the metadata.
 
-$ knife cookbook create netscape
-** Creating cookbook netscape
-** Creating README for cookbook: netscape
-** Creating metadata for cookbook: netscape
-$ knife bump netscape patch
-Bumping patch level of the netscape cookbook from 0.0.1 to 0.0.2
-$ grep version cookbooks/netscape/metadata.rb 
-version          "0.0.2"
-$ knife bump netscape minor
-Bumping minor level of the netscape cookbook from 0.0.2 to 0.1.2
-$ grep version cookbooks/netscape/metadata.rb 
-version          "0.1.2"
+    $ knife cookbook create netscape
+    ** Creating cookbook netscape
+    ** Creating README for cookbook: netscape
+    ** Creating metadata for cookbook: netscape
+    $ knife bump netscape patch
+    Bumping patch level of the netscape cookbook from 0.0.1 to 0.0.2
+    $ grep version cookbooks/netscape/metadata.rb 
+    version          "0.0.2"
+    $ knife bump netscape minor
+    Bumping minor level of the netscape cookbook from 0.0.2 to 0.1.2
+    $ grep version cookbooks/netscape/metadata.rb 
+    version          "0.1.2"
 
 Tagging
 -------
