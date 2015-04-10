@@ -78,6 +78,7 @@ module CookbookBump
     end
 
     def update_metadata(old_version, new_version, metadata_file)
+      metadata_file = File.expand_path(metadata_file)
       open_file = File.open(metadata_file, "r")
       body_of_file = open_file.read
       open_file.close
